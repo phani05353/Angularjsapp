@@ -82,13 +82,46 @@ module.exports = function(app, express) {
                  	message: "Login Successful!!",
                  	token: token
                  });
-            }
+             }
 
           }
-     });
+      });
 
   });
+  
 
+  api.use(function(req, res, next){
+     
+     console.log("Welcome to the Application");
+
+     var token = req.body.token || req.param('token') || req.headers['x-access-token'];
+
+      if(token) {
+
+      	jsonwebtoken.verify(token, secretKey, function(err, decoded){
+
+      		if(err) {
+      			res.status(403).send({ success: false, message :"Failed Authentication"});
+
+      		}else{
+      			req.decoded = decoded;
+      			next();
+
+      		}
+      		
+      	});
+      } else {
+
+
+      	res.status(403).send({ success: false, mesage : "No token Provided"});
+      }
+
+});
+
+  api.get('/', function(req, res) {
+
+  	res.json("Hello Phani");
+  });
 
 
 return api
