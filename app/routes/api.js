@@ -118,46 +118,48 @@ module.exports = function(app, express) {
 
 });
 
-  api.route('/')
+ api.route('/')
+
+		.post(function(req, res) {
+
+			var story = new Story({
+				creator: req.decoded.id,
+				content: req.body.content,
+
+			});
+
+			story.save(function(err, newStory) {
+				if(err) {
+					res.send(err);
+					return
+				}
+				io.emit('story', newStory)
+				res.json({message: "New Story Created!"});
+			});
+		})
 
 
-    .post(function(req, res){
+		.get(function(req, res) {
 
-    	var story = new Story ({
-    		 creator: req.decoded.id,
-    		 content: req.body.content,
+			Story.find({ creator: req.decoded.id }, function(err, stories) {
 
-    	});
+				if(err) {
+					res.send(err);
+					return;
+				}
 
-    	story.save(function(err){
-    		if(err) {
-    			res.send(err);
-    			return
-    		}
-    		res.json({ message:"New Story created"});
-    	});
+				res.send(stories);
+			});
+		});
 
-    })
-
-
-
-    .get(function(req, res){
-
-
-    	Story.find({ creator: req.decoded.id }, function(err, stories) {
-
-
-    		if (err) {
-    			res.send(err);
-    			return;
-    		}
-
-    		res.send(stories);
-    	});
-    });
+	api.get('/me', function(req, res) {
+		res.send(req.decoded);
+	});
 
 
 
-return api
+
+	return api;
+
 
 }
