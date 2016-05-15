@@ -5,19 +5,19 @@ angular.module('appRoutes', ['ngRoute'])
 
 	$routeProvider
 
-		.when('/', {
+	.when('/', {
 			templateUrl: 'app/views/pages/home.html',
 			controller: 'MainController',
 			controllerAs: 'main'
-		})
-		.when('/login', {
+		  })
+	.when('/login', {
 			templateUrl: 'app/views/pages/login.html'
 		})
-		.when('/signup', {
+	.when('/signup', {
 			templateUrl: 'app/views/pages/signup.html'
-		})
+	})
 
-		.when('/allStories', {
+	.when('/allStories', {
 			templateUrl: 'app/views/pages/allStories.html',
 			controller: 'AllStoriesController',
 			controllerAs: 'story',
@@ -26,8 +26,7 @@ angular.module('appRoutes', ['ngRoute'])
 					return Story.allStories();
 				}
 			}
-
-		})
+					})
 
 	$locationProvider.html5Mode(true);
 
