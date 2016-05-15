@@ -30,14 +30,18 @@ module.exports = function(app, express) {
       	username: req.body.username,
       	password: req.body.password
       });
-
+      var token = createToken(user);
       user.save(function(err) {
       	if(err) {
       		res.send(err);
       		return;
       	}
 
-      	res.json({ message: 'User Created!'});
+      	res.json({
+          success:true,
+      	 message: 'User Created!',
+         token: token
+      	});
       });
    });
 
